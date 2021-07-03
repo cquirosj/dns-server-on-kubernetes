@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dnsserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dnsserver 
+  template:
+    metadata:
+      labels:
+        app: dnsserver
+    spec:
+      containers:
+      - image: jpillora/dnsmasq
+        imagePullPolicy: Always
+        name: dnsserver    
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "20m"
+          limits:
+            memory: "500Mi"
+            cpu: "40m"
+        ports:          
+        - containerPort: 8080        
+          protocol: TCP
+        - containerPort: 53
+          protocol: UDP
+        env:
+        - name: HTTP_USER
+          value: "update"
+        - name: HTTP_PASS
+          value: "update"
